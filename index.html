@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="GEO satellite azimuth/elevation calculator using WGS-84." />
+  <title>GEO Satellite Azimuth / Elevation Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <p class="eyebrow">GEO SATELLITE TOOL</p>
+      <h1>محاسبه‌گر Azimuth / Elevation ماهواره‌های زمین‌آهنگ</h1>
+      <p class="subtitle">
+        با وارد کردن Latitude و Longitude ایستگاه زمینی و Elevation مطلوب،
+        موقعیت‌های متناظر روی قوس GEO، زاویه Azimuth و Longitude ماهواره محاسبه می‌شوند.
+      </p>
+    </header>
+
+    <section class="panel">
+      <form id="calcForm" class="grid" novalidate>
+        <label>
+          <span>Latitude ایستگاه (°)</span>
+          <input id="lat" type="number" step="0.000001" min="-90" max="90" value="35.6892" />
+        </label>
+
+        <label>
+          <span>Longitude ایستگاه (°)</span>
+          <input id="lon" type="number" step="0.000001" min="-180" max="180" value="51.3890" />
+        </label>
+
+        <label>
+          <span>Elevation مطلوب (°)</span>
+          <input id="el" type="number" step="0.01" min="-90" max="90" value="30" />
+        </label>
+
+        <label>
+          <span>ارتفاع ایستگاه از سطح دریا (m)</span>
+          <input id="h" type="number" step="1" value="1200" />
+        </label>
+
+        <label>
+          <span>گام جدول Elevation (°)</span>
+          <input id="step" type="number" step="0.1" min="0.1" max="30" value="5" />
+        </label>
+
+        <div class="actions">
+          <button type="submit">محاسبه</button>
+          <button type="button" class="secondary" id="tehranBtn">نمونه تهران</button>
+        </div>
+      </form>
+
+      <p id="message" class="message" aria-live="polite"></p>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <span class="card-label">حداکثر Elevation</span>
+        <strong id="maxEl">—</strong>
+        <small>برای ماهواره‌ای با Longitude نزدیک به ایستگاه</small>
+      </article>
+
+      <article class="card">
+        <span class="card-label">شاخه شرقی GEO</span>
+        <dl>
+          <div><dt>Azimuth</dt><dd id="azE">—</dd></div>
+          <div><dt>Satellite Longitude</dt><dd id="satLonE">—</dd></div>
+        </dl>
+      </article>
+
+      <article class="card">
+        <span class="card-label">شاخه غربی GEO</span>
+        <dl>
+          <div><dt>Azimuth</dt><dd id="azW">—</dd></div>
+          <div><dt>Satellite Longitude</dt><dd id="satLonW">—</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>جدول Elevation → Azimuth</h2>
+          <p>دو جواب ممکن برای موقعیت‌های شرقی و غربی روی GEO Arc.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Elevation</th>
+              <th>Azimuth شرق</th>
+              <th>Longitude شرق</th>
+              <th>Azimuth غرب</th>
+              <th>Longitude غرب</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel note">
+      <h2>تعریف زاویه‌ها</h2>
+      <p>
+        Azimuth از شمال حقیقی اندازه‌گیری می‌شود:
+        North = 0°، East = 90°، South = 180°، West = 270°.
+        محاسبات بر پایه مدل WGS-84 انجام می‌شوند و شعاع مدار GEO برابر 42164 km در نظر گرفته شده است.
+      </p>
+    </section>
+
+    <footer>
+      <span>Static app — مناسب برای GitHub Pages</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

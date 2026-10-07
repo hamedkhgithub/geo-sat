@@ -1,0 +1,73 @@
+# GEO Satellite Azimuth / Elevation Calculator
+
+یک Calculator استاتیک برای محاسبه زاویه **Azimuth** متناظر با یک **Elevation** مشخص برای ماهواره‌های زمین‌آهنگ (GEO).
+
+## قابلیت‌ها
+
+- ورود Latitude و Longitude ایستگاه زمینی
+- ورود ارتفاع ایستگاه از سطح دریا
+- ورود Elevation مطلوب
+- محاسبه دو جواب ممکن روی GEO Arc:
+  - شاخه شرقی
+  - شاخه غربی
+- نمایش:
+  - Azimuth
+  - Longitude ماهواره GEO
+  - حداکثر Elevation قابل دستیابی
+- تولید جدول Elevation → Azimuth
+- مدل زمین WGS-84
+- بدون نیاز به Backend یا Dependency
+- مناسب برای GitHub Pages
+
+## روش اجرا به صورت Local
+
+فقط فایل `index.html` را در مرورگر باز کنید.
+
+## انتشار روی GitHub Pages
+
+1. یک Repository جدید در GitHub بسازید.
+2. محتویات این پروژه را در Root همان Repository قرار دهید.
+3. Commit و Push کنید.
+4. در GitHub وارد مسیر زیر شوید:
+
+   **Settings → Pages**
+
+5. در بخش **Build and deployment**:
+   - Source را روی **Deploy from a branch** بگذارید.
+   - Branch را روی `main` قرار دهید.
+   - Folder را روی `/(root)` تنظیم کنید.
+6. روی Save بزنید.
+
+بعد از فعال شدن Pages، آدرس سایت معمولاً به شکل زیر خواهد بود:
+
+`https://USERNAME.github.io/REPOSITORY-NAME/`
+
+## قرارداد Azimuth
+
+- North = 0°
+- East = 90°
+- South = 180°
+- West = 270°
+
+## فرضیات مداری
+
+- مدار GEO در صفحه استوا
+- شعاع ژئوسنتریک مدار GEO: `42164 km`
+- مدل زمین: WGS-84
+
+## ساختار پروژه
+
+```text
+geo-satellite-calculator/
+├── index.html
+├── style.css
+├── app.js
+├── README.md
+├── LICENSE
+└── .nojekyll
+```
+
+## نکته مهندسی
+
+برای یک ایستگاه زمینی ثابت، یک Elevation مشخص معمولاً دو جواب روی قوس GEO دارد؛
+یکی در سمت شرق و دیگری در سمت غرب. این ابزار هر دو جواب را محاسبه می‌کند.
