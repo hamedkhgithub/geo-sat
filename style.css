@@ -382,3 +382,176 @@ footer {
 @media (max-width: 760px) {
   .chart-controls { grid-template-columns: 1fr; }
 }
+
+
+/* v6 — exact nonlinear antenna beam calculator */
+.beam-panel { margin-top: 18px; }
+
+.beam-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.5fr 1fr auto;
+  gap: 14px;
+  align-items: end;
+  margin-top: 8px;
+}
+
+.beam-grid select {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0e1528;
+  color: var(--text);
+  padding: 10px 12px;
+  direction: ltr;
+  outline: none;
+}
+
+.beam-grid select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(118,169,255,.14);
+}
+
+.beam-action { align-items: end; }
+.beam-action button { white-space: nowrap; }
+
+.beam-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.beam-result {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  border-radius: 14px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.beam-result.primary {
+  border-color: rgba(118,169,255,.7);
+}
+
+.beam-result span,
+.beam-result small {
+  display: block;
+  color: var(--muted);
+}
+
+.beam-result strong {
+  display: block;
+  margin: 7px 0 3px;
+  font-size: 1.35rem;
+  direction: ltr;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.beam-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.beam-details > div {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 11px 13px;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.beam-details span { color: var(--muted); }
+.beam-details strong {
+  direction: ltr;
+  text-align: left;
+}
+
+@media (max-width: 980px) {
+  .beam-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .beam-results { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .beam-grid,
+  .beam-details { grid-template-columns: 1fr; }
+  .beam-action button { width: 100%; }
+}
+
+
+/* v7 — persistent chart point selection */
+.selection-panel {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.selection-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.selection-head h3 {
+  margin: 0 0 2px;
+  font-size: 1rem;
+}
+
+.selection-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.mini-btn {
+  min-height: 38px;
+  padding: 7px 12px;
+}
+
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.selection-card {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px;
+  min-width: 0;
+}
+
+.selection-card.delta-card {
+  border-style: dashed;
+}
+
+.selection-title {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  margin-bottom: 7px;
+}
+
+.selection-values {
+  direction: ltr;
+  text-align: left;
+  line-height: 1.8;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.selection-values strong {
+  color: var(--text);
+}
+
+@media (max-width: 780px) {
+  .selection-grid { grid-template-columns: 1fr; }
+}

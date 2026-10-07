@@ -114,6 +114,34 @@
         <div id="chartTooltip" class="chart-tooltip" hidden></div>
       </div>
       <div id="chartStatus" class="chart-status"></div>
+      
+      <div id="selectionPanel" class="selection-panel">
+        <div class="selection-head">
+          <div>
+            <h3>Selected GEO Points</h3>
+            <p>برای ثبت Point 1 و Point 2 روی منحنی کلیک کنید.</p>
+          </div>
+          <button id="clearSelectedPoints" type="button" class="secondary mini-btn">Clear</button>
+        </div>
+
+        <div class="selection-grid">
+          <article class="selection-card">
+            <span class="selection-title">Point 1</span>
+            <div id="selP1" class="selection-values">—</div>
+          </article>
+
+          <article class="selection-card">
+            <span class="selection-title">Point 2</span>
+            <div id="selP2" class="selection-values">—</div>
+          </article>
+
+          <article class="selection-card delta-card">
+            <span class="selection-title">Delta (P2 − P1)</span>
+            <div id="selDelta" class="selection-values">—</div>
+          </article>
+        </div>
+      </div>
+
       <p class="chart-help">در حالت Equal Angular Scale، یک درجه روی محور Longitude دقیقاً همان طول نمایشی یک درجه روی محور Elevation را دارد. محور افقی با قرارداد استاندارد E/W نمایش داده می‌شود.</p>
     </section>
 
@@ -147,6 +175,75 @@
         Azimuth از شمال حقیقی اندازه‌گیری می‌شود:
         North = 0°، East = 90°، South = 180°، West = 270°.
         محاسبات بر پایه مدل WGS-84 انجام می‌شوند و شعاع مدار GEO برابر 42164 km در نظر گرفته شده است.
+      </p>
+    </section>
+
+
+    <section class="panel beam-panel">
+      <div class="section-head">
+        <div>
+          <h2>Antenna Beam Calculator</h2>
+          <p>
+            محاسبه دقیق Beamwidth متناظر روی منحنی واقعی GEO. موقعیت ایستگاه از ورودی‌های بالای صفحه خوانده می‌شود
+            و Beam حول ماهواره مرکزی انتخاب‌شده متقارن فرض می‌شود.
+          </p>
+        </div>
+      </div>
+
+      <div class="beam-grid">
+        <label>
+          <span>Center GEO Satellite Longitude</span>
+          <input id="beamCenterLon" type="number" value="70" min="-180" max="180" step="0.1" />
+        </label>
+
+        <label>
+          <span>Calculation Mode</span>
+          <select id="beamMode">
+            <option value="el-to-az" selected>Elevation BW → Required Azimuth BW</option>
+            <option value="az-to-el">Azimuth BW → Required Elevation BW</option>
+          </select>
+        </label>
+
+        <label>
+          <span id="beamInputLabel">Elevation Beamwidth (°)</span>
+          <input id="beamWidth" type="number" value="10" min="0.01" max="180" step="0.1" />
+        </label>
+
+        <div class="actions beam-action">
+          <button id="beamCalcBtn" type="button">محاسبه Beam</button>
+        </div>
+      </div>
+
+      <p id="beamMessage" class="message" aria-live="polite"></p>
+
+      <div class="beam-results">
+        <article class="beam-result">
+          <span>Beam Center</span>
+          <strong id="beamCenterLook">—</strong>
+          <small id="beamCenterLonOut">—</small>
+        </article>
+
+        <article class="beam-result primary">
+          <span id="beamResultLabel">Required Azimuth Beamwidth</span>
+          <strong id="beamResult">—</strong>
+          <small>Full symmetric beamwidth around boresight</small>
+        </article>
+
+        <article class="beam-result">
+          <span>Covered GEO Arc</span>
+          <strong id="beamCoverage">—</strong>
+          <small id="beamCoverageSpan">—</small>
+        </article>
+      </div>
+
+      <div class="beam-details">
+        <div><span>Left / West edge</span><strong id="beamLeftEdge">—</strong></div>
+        <div><span>Right / East edge</span><strong id="beamRightEdge">—</strong></div>
+      </div>
+
+      <p class="chart-help">
+        روش محاسبه غیرخطی است: ابتدا بخش پیوسته‌ی GEO Arc که داخل Beam ورودی قرار می‌گیرد پیدا می‌شود،
+        سپس Beamwidth محور دیگر به‌صورت متقارن حول Boresight محاسبه می‌شود. پوشش فقط تا افق هندسی (Elevation ≥ 0°) در نظر گرفته می‌شود.
       </p>
     </section>
 

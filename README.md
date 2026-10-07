@@ -88,3 +88,28 @@ geo-satellite-calculator/
   - `Auto`: ارتفاع نمودار برای خوانایی مستقل از بازه محور X تنظیم می‌شود.
 
 Tooltip فقط `Satellite Longitude`، `Azimuth` و `Elevation` را نمایش می‌دهد.
+
+
+## Antenna Beam Calculator (v6)
+
+در انتهای صفحه یک محاسبه‌گر غیرخطی برای Beam آنتن اضافه شده است.
+
+ورودی‌ها:
+- موقعیت ایستگاه زمینی از Calculator اصلی
+- Longitude ماهواره GEO مرکزی (Boresight)
+- حالت محاسبه:
+  - Elevation Beamwidth → Required Azimuth Beamwidth
+  - Azimuth Beamwidth → Required Elevation Beamwidth
+- Beamwidth ورودی
+
+روش محاسبه از تقریب شیب محلی استفاده نمی‌کند. بخش پیوسته‌ی منحنی واقعی GEO که در Beam ورودی قرار می‌گیرد به صورت عددی پیدا می‌شود و سپس Beamwidth متقارن لازم روی محور دیگر محاسبه می‌گردد. محاسبات تا افق هندسی (Elevation >= 0°) محدود می‌شوند.
+
+
+## Interactive point selection (v7)
+
+- Hover tooltip remains active.
+- First click on the GEO curve stores Point 1.
+- Second click stores Point 2 and shows signed ΔLongitude, ΔAzimuth and ΔElevation.
+- Third click clears the previous pair automatically and becomes the new Point 1.
+- The Azimuth delta uses wrapped angular difference in ±180°.
+- Negative elevations are not plotted and cannot be selected.
