@@ -578,3 +578,5 @@ footer {
 
 .selected-label-p1 { fill: #6d28d9; }
 .selected-label-p2 { fill: #b91c1c; }
+
+.preset-label{min-width:220px}.preset-label select{width:100%;min-height:46px;border-radius:10px;border:1px solid var(--border);background:#0e1528;color:var(--text);padding:10px 12px}.preset-label select:focus{border-color:var(--accent);outline:none}

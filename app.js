@@ -7,6 +7,21 @@
   const E2 = F * (2 - F);
   const R_GEO = 42164.0;
 
+  const CITY_PRESETS = {
+tehran:{lat:35.6889,lon:51.3897,h:1200},karaj:{lat:35.8328,lon:50.9917,h:1312},ardabil:{lat:38.2498,lon:48.2933,h:1351},
+urmia:{lat:37.5527,lon:45.0761,h:1332},tabriz:{lat:38.0739,lon:46.2961,h:1351},isfahan:{lat:32.6525,lon:51.6750,h:1574},
+ilam:{lat:33.6374,lon:46.4227,h:1431},bushehr:{lat:28.9234,lon:50.8203,h:5},birjand:{lat:32.8663,lon:59.2211,h:1491},
+mashhad:{lat:36.2975,lon:59.6059,h:995},bojnurd:{lat:37.4747,lon:57.3290,h:1070},ahvaz:{lat:31.3183,lon:48.6706,h:17},
+zanjan:{lat:36.6736,lon:48.4787,h:1663},semnan:{lat:35.5729,lon:53.3971,h:1130},zahedan:{lat:29.4963,lon:60.8629,h:1352},
+shiraz:{lat:29.6100,lon:52.5425,h:1486},qazvin:{lat:36.2688,lon:50.0041,h:1278},qom:{lat:34.6401,lon:50.8764,h:928},
+sanandaj:{lat:35.3144,lon:46.9923,h:1538},kerman:{lat:30.2839,lon:57.0834,h:1755},kermanshah:{lat:34.3142,lon:47.0650,h:1350},
+yasuj:{lat:30.6682,lon:51.5879,h:1870},gorgan:{lat:36.8416,lon:54.4436,h:155},rasht:{lat:37.2808,lon:49.5832,h:-5},
+khorramabad:{lat:33.4878,lon:48.3558,h:1147},sari:{lat:36.5633,lon:53.0601,h:20},arak:{lat:34.0917,lon:49.6892,h:1718},
+bandarabbas:{lat:27.1865,lon:56.2808,h:9},hamedan:{lat:34.7992,lon:48.5146,h:1850},yazd:{lat:31.8974,lon:54.3569,h:1216},
+shahrekord:{lat:32.3256,lon:50.8644,h:2070},chabahar:{lat:25.2919,lon:60.6430,h:14}
+  };
+
+
   let selectedGeoPoints = [];
   let lastChartState = null;              // Geocentric GEO orbital radius [km]
 
@@ -838,17 +853,23 @@
     render();
   });
 
-  $("tehranBtn").addEventListener("click", () => {
-    $("lat").value = "35.6892";
-    $("lon").value = "51.3890";
-    $("el").value = "30";
-    $("h").value = "1200";
-    $("step").value = "5";
-    $("chartStep").value = "1";
-    $("xRangeMode").value = "visible";
-    $("aspectMode").value = "equal";
+  $("cityPreset").addEventListener("change", () => {
+    const p = CITY_PRESETS[$("cityPreset").value];
+    if (!p) return;
+    $("lat").value = p.lat.toFixed(4);
+    $("lon").value = p.lon.toFixed(4);
+    $("h").value = String(p.h);
+    selectedGeoPoints = [];
+    renderSelectedGeoPoints();
     render();
   });
+
+  ["lat","lon"].forEach(id => $(id).addEventListener("input", () => {
+    const sel = $("cityPreset");
+    const p = CITY_PRESETS[sel.value];
+    if (!p) return;
+    if (Math.abs(Number($("lat").value)-p.lat)>1e-6 || Math.abs(Number($("lon").value)-p.lon)>1e-6) sel.value="";
+  }));
 
   ["lat", "lon", "el", "h", "step", "chartStep", "xRangeMode", "aspectMode"].forEach((id) => {
     $(id).addEventListener("change", render);

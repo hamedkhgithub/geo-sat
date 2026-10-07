@@ -135,3 +135,7 @@ Tooltip فقط `Satellite Longitude`، `Azimuth` و `Elevation` را نمایش 
 4. محاسبات غیرخطی Beamwidth مانند قبل روی GEO Arc واقعی انجام می‌شوند.
 
 نکته: در عرض جغرافیایی تقریباً صفر، Azimuth به‌تنهایی Longitude ماهواره GEO را یکتا تعیین نمی‌کند و Calculator این حالت را اعلام می‌کند.
+
+
+## v10 — Presets
+۳۱ مرکز استان ایران + چابهار به‌صورت Preset آفلاین اضافه شده‌اند.
