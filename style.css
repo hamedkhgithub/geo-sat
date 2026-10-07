@@ -321,3 +321,64 @@ footer {
   .chart-heading { flex-direction: column; }
   .geo-chart { min-height: 260px; }
 }
+
+/* v5 chart controls and scale handling */
+.chart-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 4px 0 16px;
+  direction: rtl;
+}
+
+.chart-controls select,
+.chart-controls input {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0e1528;
+  color: var(--text);
+  padding: 9px 11px;
+  outline: none;
+}
+
+.chart-controls select { direction: ltr; }
+.chart-controls input { direction: ltr; text-align: left; }
+.chart-controls select:focus,
+.chart-controls input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(118,169,255,.14);
+}
+
+.geo-chart {
+  min-height: 0 !important;
+  aspect-ratio: auto;
+}
+
+.geo-chart .plot-bg { fill: #ffffff; }
+.geo-chart .curve-geo {
+  fill: none;
+  stroke: #0066cc;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.geo-chart .station-line {
+  stroke: #d15b00;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+  opacity: .9;
+}
+
+.chart-status {
+  direction: ltr;
+  text-align: left;
+  color: var(--muted);
+  font-size: .78rem;
+  margin-top: 8px;
+}
+
+@media (max-width: 760px) {
+  .chart-controls { grid-template-columns: 1fr; }
+}

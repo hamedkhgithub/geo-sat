@@ -85,17 +85,36 @@
           <h2>نمودار Elevation بر حسب Longitude ماهواره GEO</h2>
           <p>ماوس یا لمس را روی منحنی GEO حرکت دهید تا Longitude ماهواره، Azimuth و Elevation همان نقطه نمایش داده شوند.</p>
         </div>
-        <div class="chart-legend" aria-label="راهنمای نمودار">
-          <span><i class="legend-dot east"></i> شاخه شرقی</span>
-          <span><i class="legend-dot west"></i> شاخه غربی</span>
-        </div>
+
+      </div>
+
+      <div class="chart-controls">
+        <label>
+          <span>Tooltip / Sampling Step (°)</span>
+          <input id="chartStep" type="number" value="1" min="0.05" max="10" step="0.05" />
+        </label>
+        <label>
+          <span>محدوده محور Longitude</span>
+          <select id="xRangeMode">
+            <option value="visible" selected>Visible GEO Arc</option>
+            <option value="full">Full GEO (-180°…+180°)</option>
+          </select>
+        </label>
+        <label>
+          <span>Scale نمودار</span>
+          <select id="aspectMode">
+            <option value="equal" selected>Equal: 1° X = 1° Y</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
       </div>
 
       <div id="chartWrap" class="geo-chart-wrap">
-        <svg id="geoChart" class="geo-chart" viewBox="0 0 900 480" role="img" aria-label="Elevation versus satellite longitude for visible GEO satellites"></svg>
+        <svg id="geoChart" class="geo-chart" viewBox="0 0 900 480" role="img" aria-label="Elevation versus satellite longitude for GEO satellites"></svg>
         <div id="chartTooltip" class="chart-tooltip" hidden></div>
       </div>
-      <p class="chart-help">محور افقی، Longitude ماهواره GEO را با قرارداد استاندارد East/West نشان می‌دهد. Azimuth: 0° = North، 90° = East، 180° = South، 270° = West.</p>
+      <div id="chartStatus" class="chart-status"></div>
+      <p class="chart-help">در حالت Equal Angular Scale، یک درجه روی محور Longitude دقیقاً همان طول نمایشی یک درجه روی محور Elevation را دارد. محور افقی با قرارداد استاندارد E/W نمایش داده می‌شود.</p>
     </section>
 
     <section class="panel">
