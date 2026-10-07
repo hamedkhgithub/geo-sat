@@ -166,6 +166,176 @@
     }
   }
 
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  let chartPoints = [];
+
+  function svgEl(name, attrs = {}) {
+    const el = document.createElementNS(SVG_NS, name);
+    Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, String(v)));
+    return el;
+  }
+
+  function createGeoChartData(lat, lon, h, maxEl) {
+    const east = [];
+    const west = [];
+    const samples = 360;
+
+    for (let i = 0; i <= samples; i++) {
+      const elevation = maxEl * (i / samples);
+      const r = solveForElevation(lat, lon, h, elevation);
+      if (!r) continue;
+
+      east.push({
+        branch: "East GEO branch",
+        azimuth: r.east.azimuth,
+        elevation: r.east.elevation,
+        stationLat: lat,
+        stationLon: lon,
+        satLat: 0,
+        satLon: r.east.lon
+      });
+      west.push({
+        branch: "West GEO branch",
+        azimuth: r.west.azimuth,
+        elevation: r.west.elevation,
+        stationLat: lat,
+        stationLon: lon,
+        satLat: 0,
+        satLon: r.west.lon
+      });
+    }
+
+    return { east, west };
+  }
+
+  function renderGeoChart(lat, lon, h, maxEl) {
+    const svg = $("geoChart");
+    const tooltip = $("chartTooltip");
+    if (!svg || !tooltip) return;
+
+    svg.innerHTML = "";
+    tooltip.hidden = true;
+    chartPoints = [];
+
+    const W = 900, H = 480;
+    const margin = { left: 68, right: 26, top: 22, bottom: 58 };
+    const pw = W - margin.left - margin.right;
+    const ph = H - margin.top - margin.bottom;
+    const yMax = Math.max(10, Math.ceil(maxEl / 10) * 10);
+
+    const xScale = az => margin.left + (az / 360) * pw;
+    const yScale = el => margin.top + ph - (el / yMax) * ph;
+
+    // Background grid and X ticks
+    for (let az = 0; az <= 360; az += 45) {
+      const x = xScale(az);
+      svg.appendChild(svgEl("line", { x1:x, y1:margin.top, x2:x, y2:margin.top+ph, class:"grid-line" }));
+      const t = svgEl("text", { x, y:margin.top+ph+24, "text-anchor":"middle", class:"tick-text" });
+      t.textContent = `${az}°`;
+      svg.appendChild(t);
+    }
+
+    const yStep = yMax <= 30 ? 5 : yMax <= 60 ? 10 : 15;
+    for (let el = 0; el <= yMax + 1e-9; el += yStep) {
+      const y = yScale(el);
+      svg.appendChild(svgEl("line", { x1:margin.left, y1:y, x2:margin.left+pw, y2:y, class:"grid-line" }));
+      const t = svgEl("text", { x:margin.left-12, y:y+5, "text-anchor":"end", class:"tick-text" });
+      t.textContent = `${el}°`;
+      svg.appendChild(t);
+    }
+
+    svg.appendChild(svgEl("line", { x1:margin.left, y1:margin.top+ph, x2:margin.left+pw, y2:margin.top+ph, class:"axis-line" }));
+    svg.appendChild(svgEl("line", { x1:margin.left, y1:margin.top, x2:margin.left, y2:margin.top+ph, class:"axis-line" }));
+
+    const xTitle = svgEl("text", { x:margin.left+pw/2, y:H-14, "text-anchor":"middle", class:"axis-title" });
+    xTitle.textContent = "Azimuth (deg)";
+    svg.appendChild(xTitle);
+
+    const yTitle = svgEl("text", { x:18, y:margin.top+ph/2, "text-anchor":"middle", class:"axis-title", transform:`rotate(-90 18 ${margin.top+ph/2})` });
+    yTitle.textContent = "Elevation (deg)";
+    svg.appendChild(yTitle);
+
+    const data = createGeoChartData(lat, lon, h, maxEl);
+
+    function addCurve(points, className) {
+      if (!points.length) return;
+      const ordered = points.slice().sort((a,b) => a.elevation-b.elevation);
+      const d = ordered.map((p,i) => `${i ? "L" : "M"}${xScale(p.azimuth).toFixed(2)},${yScale(p.elevation).toFixed(2)}`).join(" ");
+      svg.appendChild(svgEl("path", { d, class:className }));
+      ordered.forEach(p => chartPoints.push({ ...p, px:xScale(p.azimuth), py:yScale(p.elevation) }));
+    }
+
+    addCurve(data.east, "curve-east");
+    addCurve(data.west, "curve-west");
+
+    const hoverV = svgEl("line", { x1:0, y1:margin.top, x2:0, y2:margin.top+ph, class:"hover-line", visibility:"hidden" });
+    const hoverH = svgEl("line", { x1:margin.left, y1:0, x2:margin.left+pw, y2:0, class:"hover-line", visibility:"hidden" });
+    const hoverP = svgEl("circle", { cx:0, cy:0, r:6, class:"hover-point", visibility:"hidden" });
+    svg.append(hoverV, hoverH, hoverP);
+
+    const hit = svgEl("rect", { x:margin.left, y:margin.top, width:pw, height:ph, class:"hit-area" });
+    svg.appendChild(hit);
+
+    function hideHover() {
+      hoverV.setAttribute("visibility", "hidden");
+      hoverH.setAttribute("visibility", "hidden");
+      hoverP.setAttribute("visibility", "hidden");
+      tooltip.hidden = true;
+    }
+
+    function moveHover(clientX, clientY) {
+      const rect = svg.getBoundingClientRect();
+      const sx = W / rect.width;
+      const sy = H / rect.height;
+      const mx = (clientX - rect.left) * sx;
+      const my = (clientY - rect.top) * sy;
+
+      if (mx < margin.left || mx > margin.left+pw || my < margin.top || my > margin.top+ph) {
+        hideHover();
+        return;
+      }
+
+      let best = null, bestD = Infinity;
+      for (const p of chartPoints) {
+        const dx = p.px - mx;
+        const dy = p.py - my;
+        const d = dx*dx + dy*dy;
+        if (d < bestD) { bestD = d; best = p; }
+      }
+      if (!best) return;
+
+      hoverV.setAttribute("x1", best.px); hoverV.setAttribute("x2", best.px); hoverV.setAttribute("visibility", "visible");
+      hoverH.setAttribute("y1", best.py); hoverH.setAttribute("y2", best.py); hoverH.setAttribute("visibility", "visible");
+      hoverP.setAttribute("cx", best.px); hoverP.setAttribute("cy", best.py); hoverP.setAttribute("visibility", "visible");
+
+      tooltip.innerHTML = `
+        <div class="branch">${best.branch}</div>
+        <div><strong>Azimuth:</strong> ${best.azimuth.toFixed(3)}°</div>
+        <div><strong>Elevation:</strong> ${best.elevation.toFixed(3)}°</div>
+        <div><strong>Station Lat:</strong> ${best.stationLat.toFixed(6)}°</div>
+        <div><strong>Station Lon:</strong> ${best.stationLon.toFixed(6)}°</div>
+        <div><strong>Satellite Lat:</strong> 0.000000°</div>
+        <div><strong>Satellite Lon:</strong> ${best.satLon.toFixed(6)}°</div>`;
+      tooltip.hidden = false;
+
+      const wrap = $("chartWrap").getBoundingClientRect();
+      const pointX = rect.left - wrap.left + best.px / sx;
+      const pointY = rect.top - wrap.top + best.py / sy;
+      const tw = tooltip.offsetWidth || 220;
+      const th = tooltip.offsetHeight || 150;
+      let left = pointX + 14;
+      let top = pointY - th / 2;
+      if (left + tw > wrap.width - 8) left = pointX - tw - 14;
+      top = Math.max(8, Math.min(top, wrap.height - th - 8));
+      tooltip.style.left = `${Math.max(8,left)}px`;
+      tooltip.style.top = `${top}px`;
+    }
+
+    hit.addEventListener("pointermove", e => moveHover(e.clientX, e.clientY));
+    hit.addEventListener("pointerdown", e => moveHover(e.clientX, e.clientY));
+    hit.addEventListener("pointerleave", hideHover);
+  }
+
   function render() {
     const v = readInputs();
     const msg = $("message");
@@ -177,6 +347,7 @@
       $("maxEl").textContent = "—";
       msg.textContent = "مقادیر ورودی معتبر نیستند.";
       msg.classList.add("error");
+      const chart = $("geoChart"); if (chart) chart.innerHTML = "";
       return;
     }
 
@@ -192,6 +363,7 @@
         `حداکثر Elevation تقریباً ${maxEl.toFixed(2)}° است.`;
       msg.classList.add("error");
       renderTable(v.lat, v.lon, v.h, maxEl, v.step);
+      renderGeoChart(v.lat, v.lon, v.h, maxEl);
       return;
     }
 
@@ -206,6 +378,7 @@
     msg.classList.add("ok");
 
     renderTable(v.lat, v.lon, v.h, maxEl, v.step);
+    renderGeoChart(v.lat, v.lon, v.h, maxEl);
   }
 
   $("calcForm").addEventListener("submit", (event) => {

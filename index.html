@@ -78,6 +78,26 @@
       </article>
     </section>
 
+
+    <section class="panel chart-panel">
+      <div class="section-head chart-heading">
+        <div>
+          <h2>نمودار Elevation بر حسب Azimuth</h2>
+          <p>ماوس یا لمس را روی منحنی GEO حرکت دهید تا مقادیر دقیق همان نقطه نمایش داده شوند.</p>
+        </div>
+        <div class="chart-legend" aria-label="راهنمای نمودار">
+          <span><i class="legend-dot east"></i> شاخه شرقی</span>
+          <span><i class="legend-dot west"></i> شاخه غربی</span>
+        </div>
+      </div>
+
+      <div id="chartWrap" class="geo-chart-wrap">
+        <svg id="geoChart" class="geo-chart" viewBox="0 0 900 480" role="img" aria-label="Elevation versus Azimuth for visible GEO satellites"></svg>
+        <div id="chartTooltip" class="chart-tooltip" hidden></div>
+      </div>
+      <p class="chart-help">Azimuth: 0° = North، 90° = East، 180° = South، 270° = West.  نقطه ماهواره‌ای GEO روی استوا است، بنابراین Satellite Latitude = 0°.</p>
+    </section>
+
     <section class="panel">
       <div class="section-head">
         <div>

@@ -15,6 +15,8 @@
   - Longitude ماهواره GEO
   - حداکثر Elevation قابل دستیابی
 - تولید جدول Elevation → Azimuth
+- نمودار تعاملی Elevation بر حسب Azimuth با Tooltip
+- نمایش Azimuth، Elevation، مختصات ایستگاه و Longitude ماهواره روی نمودار
 - مدل زمین WGS-84
 - بدون نیاز به Backend یا Dependency
 - مناسب برای GitHub Pages
