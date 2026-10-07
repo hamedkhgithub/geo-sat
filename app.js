@@ -332,7 +332,7 @@ shahrekord:{lat:32.3256,lon:50.8644,h:2070},chabahar:{lat:25.2919,lon:60.6430,h:
       $("satLonE").textContent = fmtLon(r.east.lon);
       $("azW").textContent = `${r.west.azimuth.toFixed(3)}°`;
       $("satLonW").textContent = fmtLon(r.west.lon);
-      msg.textContent = `برای Elevation = ${v.el.toFixed(2)}° دو موقعیت روی قوس GEO وجود دارد؛ جدایی طول جغرافیایی نسبت به ایستگاه برابر ±${r.delta.toFixed(3)}° است.`;
+      msg.textContent = `برای Elevation = ${v.el.toFixed(2)}° دو موقعیت روی قوس GEO وجود دارد؛ طول جغرافیایی نسبت به ایستگاه برابر ±${r.delta.toFixed(3)}° است.`;
       msg.classList.add("ok");
     }
 
