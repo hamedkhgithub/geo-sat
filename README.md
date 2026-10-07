@@ -139,7 +139,3 @@ Tooltip فقط `Satellite Longitude`، `Azimuth` و `Elevation` را نمایش 
 
 ## v10 — Presets
 ۳۱ مرکز استان ایران + چابهار به‌صورت Preset آفلاین اضافه شده‌اند.
-
-
-## v11 — Azimuth-step table
-فقط جدول تغییر کرده است. ورودی گام جدول اکنون Azimuth Step است و جدول با گام ثابت Azimuth، مقدار Elevation و Satellite Longitude متناظر را نمایش می‌دهد. تنظیم Tooltip/Sampling Step نمودار بدون تغییر باقی مانده است.
