@@ -243,4 +243,81 @@ footer {
   .actions button { width: 100%; }
   .panel, .card { border-radius: 14px; padding: 16px; }
 }
-\n\n/* Interactive GEO elevation/azimuth chart */\n.chart-heading {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 18px;\n}\n\n.chart-legend {\n  display: flex;\n  gap: 14px;\n  flex-wrap: wrap;\n  color: var(--muted);\n  font-size: .85rem;\n  direction: rtl;\n}\n\n.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }\n.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }\n.legend-dot.east { background: #76a9ff; }\n.legend-dot.west { background: #f1b56b; }\n\n.geo-chart-wrap {\n  position: relative;\n  width: 100%;\n  min-width: 0;\n  direction: ltr;\n  touch-action: pan-y;\n}\n\n.geo-chart {\n  display: block;\n  width: 100%;\n  height: auto;\n  min-height: 300px;\n  border-radius: 12px;\n  background: #0e1528;\n  border: 1px solid var(--border);\n}\n\n.geo-chart .grid-line { stroke: #26324d; stroke-width: 1; }\n.geo-chart .axis-line { stroke: #70809e; stroke-width: 1.25; }\n.geo-chart .tick-text { fill: #aab4ca; font-size: 13px; font-family: Tahoma, Arial, sans-serif; }\n.geo-chart .axis-title { fill: #dce5f7; font-size: 14px; font-family: Tahoma, Arial, sans-serif; font-weight: 700; }\n.geo-chart .curve-east { fill: none; stroke: #76a9ff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }\n.geo-chart .curve-west { fill: none; stroke: #f1b56b; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }\n.geo-chart .hover-line { stroke: #cbd7ee; stroke-width: 1; stroke-dasharray: 4 4; opacity: .7; pointer-events: none; }\n.geo-chart .hover-point { fill: #ffffff; stroke: #0e1528; stroke-width: 3; pointer-events: none; }\n.geo-chart .hit-area { fill: transparent; cursor: crosshair; }\n\n.chart-tooltip {\n  position: absolute;\n  z-index: 5;\n  width: max-content;\n  max-width: min(300px, calc(100% - 20px));\n  pointer-events: none;\n  background: rgba(7, 12, 25, .96);\n  color: var(--text);\n  border: 1px solid #41506e;\n  border-radius: 10px;\n  padding: 10px 12px;\n  box-shadow: 0 10px 30px rgba(0,0,0,.28);\n  font-size: .82rem;\n  line-height: 1.6;\n  direction: ltr;\n  text-align: left;\n}\n\n.chart-tooltip strong { color: var(--accent-2); }\n.chart-tooltip .branch { color: var(--muted); margin-bottom: 3px; }\n.chart-help { margin: 10px 0 0; color: var(--muted); font-size: .82rem; }\n\n@media (max-width: 620px) {\n  .chart-heading { flex-direction: column; }\n  .geo-chart { min-height: 260px; }\n}\n
+
+/* Interactive GEO elevation/azimuth chart */
+.chart-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: .85rem;
+  direction: rtl;
+}
+
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend-dot.east { background: #0066cc; }
+.legend-dot.west { background: #d15b00; }
+
+.geo-chart-wrap {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  direction: ltr;
+  touch-action: pan-y;
+}
+
+/* Keep the plot readable regardless of the page/browser dark theme. */
+.geo-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.geo-chart .grid-line { stroke: #e2e8f0; stroke-width: 1; }
+.geo-chart .axis-line { stroke: #334155; stroke-width: 1.35; }
+.geo-chart .tick-text { fill: #334155; font-size: 13px; font-family: Tahoma, Arial, sans-serif; }
+.geo-chart .axis-title { fill: #0f172a; font-size: 14px; font-family: Tahoma, Arial, sans-serif; font-weight: 700; }
+.geo-chart .curve-east { fill: none; stroke: #0066cc; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.geo-chart .curve-west { fill: none; stroke: #d15b00; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.geo-chart .hover-line { stroke: #475569; stroke-width: 1; stroke-dasharray: 4 4; opacity: .8; pointer-events: none; }
+.geo-chart .hover-point { fill: #ffffff; stroke: #111827; stroke-width: 3; pointer-events: none; }
+.geo-chart .hit-area { fill: transparent; cursor: crosshair; }
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 5;
+  width: max-content;
+  max-width: min(300px, calc(100% - 20px));
+  pointer-events: none;
+  background: rgba(255, 255, 255, .98);
+  color: #111827;
+  border: 1px solid #94a3b8;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .18);
+  font-size: .82rem;
+  line-height: 1.6;
+  direction: ltr;
+  text-align: left;
+}
+
+.chart-tooltip strong { color: #0f172a; }
+.chart-tooltip .branch { color: #475569; margin-bottom: 3px; }
+.chart-help { margin: 10px 0 0; color: var(--muted); font-size: .82rem; }
+
+@media (max-width: 620px) {
+  .chart-heading { flex-direction: column; }
+  .geo-chart { min-height: 260px; }
+}
