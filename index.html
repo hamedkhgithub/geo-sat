@@ -192,8 +192,8 @@
 
       <div class="beam-grid">
         <label>
-          <span>Center GEO Satellite Longitude</span>
-          <input id="beamCenterLon" type="number" value="70" min="-180" max="180" step="0.1" />
+          <span>Center Azimuth (°)</span>
+          <input id="beamCenterAz" type="number" value="150" min="0" max="360" step="0.1" />
         </label>
 
         <label>
@@ -220,7 +220,7 @@
         <article class="beam-result">
           <span>Beam Center</span>
           <strong id="beamCenterLook">—</strong>
-          <small id="beamCenterLonOut">—</small>
+          <small id="beamCenterLonOut">Resolved GEO longitude: —</small>
         </article>
 
         <article class="beam-result primary">

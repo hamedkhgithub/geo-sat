@@ -555,3 +555,26 @@ footer {
 @media (max-width: 780px) {
   .selection-grid { grid-template-columns: 1fr; }
 }
+
+
+/* v8 — SVG frozen point markers */
+.selected-point {
+  stroke: #ffffff;
+  stroke-width: 2.5;
+  pointer-events: none;
+}
+
+.selected-p1 { fill: #7c3aed; }
+.selected-p2 { fill: #dc2626; }
+
+.selected-label {
+  font: 700 13px Arial, sans-serif;
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.selected-label-p1 { fill: #6d28d9; }
+.selected-label-p2 { fill: #b91c1c; }

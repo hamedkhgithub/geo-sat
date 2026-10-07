@@ -113,3 +113,25 @@ Tooltip فقط `Satellite Longitude`، `Azimuth` و `Elevation` را نمایش 
 - Third click clears the previous pair automatically and becomes the new Point 1.
 - The Azimuth delta uses wrapped angular difference in ±180°.
 - Negative elevations are not plotted and cannot be selected.
+
+
+## v8 fix
+
+- Fixed click selection on the SVG chart (v7 accidentally contained Canvas-only drawing calls).
+- P1/P2 markers are now native SVG elements.
+- Click handling is attached to the chart hit-area and uses SVG viewBox coordinates.
+- Negative elevation samples are removed from chart data in both Visible GEO and Full GEO modes.
+- Curves are split across invisible gaps so no line is drawn through below-horizon GEO regions.
+
+
+## v9 — Beam center by Azimuth
+
+در Beam Calculator، ورودی مرکز Beam از Satellite Longitude به **Center Azimuth** تغییر داده شد.
+
+روند محاسبه:
+1. Azimuth مرکزی از کاربر دریافت می‌شود.
+2. با توجه به Latitude/Longitude/Height ایستگاه، نقطه متناظر روی GEO Arc به‌صورت عددی حل می‌شود.
+3. Longitude واقعی ماهواره و Elevation مرکز Beam نمایش داده می‌شوند.
+4. محاسبات غیرخطی Beamwidth مانند قبل روی GEO Arc واقعی انجام می‌شوند.
+
+نکته: در عرض جغرافیایی تقریباً صفر، Azimuth به‌تنهایی Longitude ماهواره GEO را یکتا تعیین نمی‌کند و Calculator این حالت را اعلام می‌کند.
