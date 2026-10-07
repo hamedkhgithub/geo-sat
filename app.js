@@ -223,15 +223,21 @@
     const ph = H - margin.top - margin.bottom;
     const yMax = Math.max(10, Math.ceil(maxEl / 10) * 10);
 
-    const xScale = az => margin.left + (az / 360) * pw;
+    const xScale = satLon => margin.left + ((satLon + 180) / 360) * pw;
     const yScale = el => margin.top + ph - (el / yMax) * ph;
 
-    // Background grid and X ticks
-    for (let az = 0; az <= 360; az += 45) {
-      const x = xScale(az);
+    function axisLonLabel(lon) {
+      if (Math.abs(lon) < 1e-9) return "0°";
+      if (Math.abs(Math.abs(lon) - 180) < 1e-9) return "180°";
+      return `${Math.abs(lon)}°${lon > 0 ? "E" : "W"}`;
+    }
+
+    // Background grid and satellite-longitude ticks
+    for (let satLon = -180; satLon <= 180; satLon += 45) {
+      const x = xScale(satLon);
       svg.appendChild(svgEl("line", { x1:x, y1:margin.top, x2:x, y2:margin.top+ph, class:"grid-line" }));
       const t = svgEl("text", { x, y:margin.top+ph+24, "text-anchor":"middle", class:"tick-text" });
-      t.textContent = `${az}°`;
+      t.textContent = axisLonLabel(satLon);
       svg.appendChild(t);
     }
 
@@ -248,7 +254,7 @@
     svg.appendChild(svgEl("line", { x1:margin.left, y1:margin.top, x2:margin.left, y2:margin.top+ph, class:"axis-line" }));
 
     const xTitle = svgEl("text", { x:margin.left+pw/2, y:H-14, "text-anchor":"middle", class:"axis-title" });
-    xTitle.textContent = "Azimuth (deg)";
+    xTitle.textContent = "Satellite Longitude";
     svg.appendChild(xTitle);
 
     const yTitle = svgEl("text", { x:18, y:margin.top+ph/2, "text-anchor":"middle", class:"axis-title", transform:`rotate(-90 18 ${margin.top+ph/2})` });
@@ -260,9 +266,20 @@
     function addCurve(points, className) {
       if (!points.length) return;
       const ordered = points.slice().sort((a,b) => a.elevation-b.elevation);
-      const d = ordered.map((p,i) => `${i ? "L" : "M"}${xScale(p.azimuth).toFixed(2)},${yScale(p.elevation).toFixed(2)}`).join(" ");
-      svg.appendChild(svgEl("path", { d, class:className }));
-      ordered.forEach(p => chartPoints.push({ ...p, px:xScale(p.azimuth), py:yScale(p.elevation) }));
+
+      // Longitude wraps at ±180°. Split the SVG path there so the curve does
+      // not draw an artificial line across the entire chart.
+      let d = "";
+      let prev = null;
+      for (const p of ordered) {
+        const x = xScale(p.satLon);
+        const y = yScale(p.elevation);
+        const wrapJump = prev && Math.abs(p.satLon - prev.satLon) > 180;
+        d += `${(!prev || wrapJump) ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)} `;
+        chartPoints.push({ ...p, px:x, py:y });
+        prev = p;
+      }
+      svg.appendChild(svgEl("path", { d: d.trim(), class:className }));
     }
 
     addCurve(data.east, "curve-east");
@@ -309,13 +326,9 @@
       hoverP.setAttribute("cx", best.px); hoverP.setAttribute("cy", best.py); hoverP.setAttribute("visibility", "visible");
 
       tooltip.innerHTML = `
-        <div class="branch">${best.branch}</div>
+        <div><strong>Satellite Longitude:</strong> ${fmtLon(best.satLon)}</div>
         <div><strong>Azimuth:</strong> ${best.azimuth.toFixed(3)}°</div>
-        <div><strong>Elevation:</strong> ${best.elevation.toFixed(3)}°</div>
-        <div><strong>Station Lat:</strong> ${best.stationLat.toFixed(6)}°</div>
-        <div><strong>Station Lon:</strong> ${best.stationLon.toFixed(6)}°</div>
-        <div><strong>Satellite Lat:</strong> 0.000000°</div>
-        <div><strong>Satellite Lon:</strong> ${best.satLon.toFixed(6)}°</div>`;
+        <div><strong>Elevation:</strong> ${best.elevation.toFixed(3)}°</div>`;
       tooltip.hidden = false;
 
       const wrap = $("chartWrap").getBoundingClientRect();
